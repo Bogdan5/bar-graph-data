@@ -7,13 +7,18 @@ req.open('GET',
 req.send();
 req.onload = function () {
   jsonData = JSON.parse(req.responseText);
-  graphDraw(jsonData);
+  graphDraw(jsonData.data);
 };
 
 const graphDraw = (data) => {
   console.log(data.data);
   let w = 1500;
-  let h = 1800;
+  let h = 5500;
+
+  const scale = d3.scaleLinear()
+    .domain(d3.min(data, d => d[1]), d3.max(data, d => d[1]))
+    .range([0, 600]);
+
   const svg = d3.select('body')
                     .append('svg')
                     .attr('width', w)
@@ -23,9 +28,9 @@ const graphDraw = (data) => {
          .data(data.data)
          .enter()
          .append('rect')
-         .attr('x', (d, i) => i * 10)
+         .attr('x', (d, i) => i * 4)
          .attr('y', (d, i) => h -  d[1])
-         .attr('width', 8)
+         .attr('width', 2)
          .attr('height', (d, i) => d[1])
          .attr('fill', 'navy')
          .attr('class', 'bar');

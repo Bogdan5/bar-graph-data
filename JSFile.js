@@ -11,13 +11,16 @@ req.onload = function () {
 };
 
 const graphDraw = (data) => {
-  console.log(data.data);
-  let w = 1500;
-  let h = 5500;
+  console.log('graphDraw', data);
+  let w = 600;
+  let h = 600;
 
-  const scale = d3.scaleLinear()
-    .domain(d3.min(data, d => d[1]), d3.max(data, d => d[1]))
-    .range([0, 600]);
+  const myScale = d3.scaleLinear();
+  myScale
+    .domain([d3.min(data, (d) => d[1]), d3.max(data, (d) => d[1])])
+    .range([30, w - 30]);
+
+  console.log('scale', myScale(10000));
 
   const svg = d3.select('body')
                     .append('svg')
@@ -25,13 +28,13 @@ const graphDraw = (data) => {
                     .attr('height', h);
 
   svg.selectAll('rect')
-         .data(data.data)
+         .data(data)
          .enter()
          .append('rect')
          .attr('x', (d, i) => i * 4)
-         .attr('y', (d, i) => h -  d[1])
+         .attr('y', (d, i) => h - myScale(d[1]))
          .attr('width', 2)
-         .attr('height', (d, i) => d[1])
+         .attr('height', (d, i) => myScale(d[1]))
          .attr('fill', 'navy')
          .attr('class', 'bar');
 };

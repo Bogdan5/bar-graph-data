@@ -16,14 +16,14 @@ const graphDraw = (data) => {
   let h = 600;
   const padding = 40;
   let xData = data.reduce((acc, item, index) => {
-    if (index % 20 === 0) {
+    if ((index - 12) % 20 === 0) {
       return acc.concat(item[0].substring(0, 4));
     } else {
       return acc;
     }
   }, []);
   let xRange = data.reduce((acc, item, index) => {
-    if (index % 20 === 0) {
+    if ((index - 12) % 20 === 0) {
       return acc.concat(index * 4);
     } else {
       return acc;
@@ -39,8 +39,8 @@ const graphDraw = (data) => {
     .range(xRange);
 
   yScale
-    .domain([d3.max(data, (d) => d[1]), d3.min(data, (d) => d[1])])
-    .range([padding, h - padding]);
+    .domain([d3.min(data, (d) => d[1]), d3.max(data, (d) => d[1])])
+    .range([h - padding, padding]);
 
   const xAxis = d3.axisBottom(xScale);
   const yAxis = d3.axisLeft(yScale);
@@ -55,15 +55,15 @@ const graphDraw = (data) => {
          .enter()
          .append('rect')
          .attr('x', (d, i) => i * 4 + padding)
-         .attr('y', (d, i) => h - yScale(d[1]) - padding)
+         .attr('y', (d, i) => yScale(d[1] + padding))
          .attr('width', 3)
-         .attr('height', (d, i) => yScale(d[1]))
+         .attr('height', (d, i) => h - yScale(d[1]) - padding)
          .attr('fill', 'navy')
          .attr('class', 'bar')
-         .on('mouseover', () => {
-           tooltip.style('visibility', 'visible');
-           tooltip.text(d[0] + )
-         )
+         .on('mouseover', (d) => {
+          tooltip.style('visibility', 'visible');
+          tooltip.text(d[0] + '- $' + d[1]);
+        })
          .on('mouseleave', () => tooltip.style('visibility', 'hidden'));
 
   let tooltip = d3.select('body')
@@ -74,7 +74,7 @@ const graphDraw = (data) => {
     .text('a simple tooltip');
 
   svg.append('g')
-    .attr('transform', 'translate(0,' + (h - padding) + ')')
+    .attr('transform', 'translate(' + padding + ', ' + (h - padding) + ')')
     .call(xAxis);
 
   svg.append('g')

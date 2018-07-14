@@ -15,12 +15,12 @@ const graphDraw = (data) => {
   let w = 1140;
   let h = 500;
   const padding = 40;
-  let yearRange = [];
-  let yearData = data.reduce((acc, item, index) => {
-    let x = parseInt(item[0].substring(0, 4));
-    if (item[0].substring(5, 7) === '01' && x % 5 === 0) {
-      yearRange.concat(index * 10);
-      return acc.concat(x);
+  let parser = d3.timeParse('%Y-%M-%D');
+  let yearData = data.reduce((acc, item) => [parser(item[0]), item[1]], []);
+
+  data.reduce((acc, item, index) => {
+    if (item[0].substring(5, 7) === '01') {
+      return acc.concat(parseInt(item[0].substring(0, 4)));
     } else {
       return acc;
     }
@@ -50,9 +50,9 @@ const graphDraw = (data) => {
          .enter()
          .append('rect')
          .attr('x', (d, i) => i * 4 + padding)
-         .attr('y', (d, i) => h - yScale(d[1] + padding))
+         .attr('y', (d, i) => yScale(d[1] + padding))
          .attr('width', 3)
-         .attr('height', (d, i) => yScale(d[1]))
+         .attr('height', (d, i) => h - yScale(d[1]))
          .attr('fill', 'navy')
          .attr('class', 'bar')
          .on('mouseover', (d) => {

@@ -1,5 +1,22 @@
 body {
   position: relative;
+  font-family: Helvetica, monospace;
+  background-color: rgb(77, 124, 87);
+}
+
+h1{
+  text-align: center;
+  color: rgb(225, 235, 241);
+}
+
+/* svg container for the graph */
+.containerSVG{
+  display: block;
+  margin: 0 auto;
+  background-color: rgb(225, 235, 241);
+  border: 1px solid navy;
+  border-radius: 5px;
+  box-shadow: 5px 5px 5px;
 }
 
 .bar:hover{

@@ -10,8 +10,8 @@ req.onload = function () {
 
 const graphDraw = (data) => {
   let w = 1140;
-  let h = 500;
-  const padding = 80;
+  let h = 540;
+  const padding = 100;
   let parser = d3.timeParse('%Y-%m-%d');
   let yearData = data.reduce((acc, item) => acc.concat([[parser(item[0]), item[1]]]), []);
 
@@ -36,7 +36,8 @@ const graphDraw = (data) => {
   const svg = d3.select('body')
                     .append('svg')
                     .attr('width', w)
-                    .attr('height', h);
+                    .attr('height', h)
+                    .attr('class', 'containerSVG');
 
   //tooltip shwing information pertaining for each bar in the chart
   let tooltip = d3.select('body')
@@ -96,7 +97,7 @@ const graphDraw = (data) => {
 
   //group for the x axis
   svg.append('g')
-    .attr('transform', 'translate(' + padding / 2 + ', 460)')
+    .attr('transform', `translate( ${padding / 2}, ${h - padding / 2})`)
     .attr('id', 'x-axis')
     .call(xAxis);
 
@@ -105,4 +106,15 @@ const graphDraw = (data) => {
     .attr('transform', 'translate(' + padding / 2 + ', ' + padding / 2 + ')')
     .attr('id', 'y-axis')
     .call(yAxis);
+
+  //rotate label on the y axis
+  svg.append('text')
+   .attr('transform', `translate(${padding * 0.75}, ${3 * padding}) rotate(-90)`)
+   .text('Gross Domestic Product');
+
+  //bottom label
+  svg.append('text')
+   .attr('transform', `translate(${w - 350}, ${h - 10})`)
+   .style('font-size', '12px')
+   .text('More Information: http://www.bea.gov/national/pdf/nipaguid.pdf');
 };

@@ -14,7 +14,7 @@ const graphDraw = (data) => {
   console.log('graphDraw', data);
   let w = 1140;
   let h = 500;
-  const padding = 40;
+  const padding = 80;
   let parser = d3.timeParse('%Y-%m-%d');
   let yearData = data.reduce((acc, item) => acc.concat([[parser(item[0]), item[1]]]), []);
 
@@ -31,19 +31,19 @@ const graphDraw = (data) => {
 
   const xAxis = d3.axisBottom(xScale);
   const yAxis = d3.axisLeft(yScale);
+  yAxis.tickSizeOuter(0);
 
   const svg = d3.select('body')
                     .append('svg')
                     .attr('width', w)
-                    .attr('height', h)
-                    .attr('transform', 'translate(${padding}), ${0}');
+                    .attr('height', h);
 
   svg.selectAll('rect')
          .data(yearData)
          .enter()
          .append('rect')
-         .attr('x', (d) => xScale(d[0]) + padding)
-         .attr('y', (d, i) => yScale(d[1] + padding))
+         .attr('x', (d) => xScale(d[0]) + padding / 2)
+         .attr('y', (d, i) => yScale(d[1]) + padding / 2)
          .attr('width', 3)
          .attr('height', (d, i) => h - yScale(d[1]) - padding)
          .attr('fill', 'navy')
@@ -62,10 +62,10 @@ const graphDraw = (data) => {
     .text('a simple tooltip');
 
   svg.append('g')
-    // .attr('transform', 'translate(' + 0 + ', ' + h - 50 + ')')
+    .attr('transform', 'translate(' + padding / 2 + ', 460)')
     .call(xAxis);
 
   svg.append('g')
-    .attr('transform', 'translate(' + padding + ', 0)')
+    .attr('transform', 'translate(' + padding / 2 + ', ' + padding / 2 + ')')
     .call(yAxis);
 };

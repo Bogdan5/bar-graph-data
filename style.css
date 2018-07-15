@@ -1,3 +1,7 @@
 .bar:hover{
   fill: red;
 }
+
+svg{
+  border: 1px solid red;
+}
